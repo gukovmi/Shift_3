@@ -11,4 +11,9 @@ class NotesListModel: INotesListModel {
     )
 
     override fun getNotesList(): ArrayList<Note>? = notesList
+
+    override fun deleteNote(position: Int) {
+        notesList.removeAt(position)
+    }
+
 }

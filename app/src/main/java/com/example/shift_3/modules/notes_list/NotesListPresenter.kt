@@ -11,12 +11,21 @@ class NotesListPresenter(private var view: INotesListView
         NotesListModel()
 
     override fun onViewAttached() {
-        view.initView()
+        view.initView(getNotesList())
     }
 
     override fun onNoteItemClick(note: Note) {
         view.navigateToNoteDetails(note)
     }
 
+    override fun update() {
+        view.updateView(getNotesList())
+    }
+
     override fun getNotesList(): ArrayList<Note>? = model.getNotesList()
+
+    override fun deleteNote(position: Int) {
+        model.deleteNote(position)
+        update()
+    }
 }

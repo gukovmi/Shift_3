@@ -25,15 +25,16 @@ class NotesListActivity : AppCompatActivity(), INotesListView {
         presenter.onViewAttached()
     }
 
-    override fun initView() {
-        if (presenter.getNotesList().isNullOrEmpty()) {
+    override fun initView(notesList: ArrayList<Note>?) {
+        if (notesList.isNullOrEmpty()) {
             Toast.makeText(this, "Notes list is empty!", Toast.LENGTH_LONG).show()
         }
         else {
             notesListAdapter = NotesListAdapter(
                 this,
-                notesList = presenter.getNotesList()!!,
-                onNoteItemClick = { note -> presenter.onNoteItemClick(note) })
+                notesList = notesList,
+                onNoteItemClick = { note -> presenter.onNoteItemClick(note) },
+                onDeleteNoteItemClick = { position -> presenter.deleteNote(position) })
 
             notesListRecyclerView.layoutManager = LinearLayoutManager(this)
             notesListRecyclerView.adapter = notesListAdapter
@@ -44,5 +45,22 @@ class NotesListActivity : AppCompatActivity(), INotesListView {
         val intent = Intent(this, NoteDetailsActivity::class.java)
         intent.putExtra("note", note)
         startActivity(intent)
+    }
+
+    override fun updateView(notesList: ArrayList<Note>?) {
+        if (notesList.isNullOrEmpty()) {
+            notesListRecyclerView.adapter=null
+            Toast.makeText(this, "Notes list is empty!", Toast.LENGTH_LONG).show()
+        }
+        else {
+            notesListAdapter = NotesListAdapter(
+                this,
+                notesList = notesList,
+                onNoteItemClick = { note -> presenter.onNoteItemClick(note) },
+                onDeleteNoteItemClick = { position -> presenter.deleteNote(position) })
+
+            notesListRecyclerView.layoutManager = LinearLayoutManager(this)
+            notesListRecyclerView.adapter = notesListAdapter
+        }
     }
 }

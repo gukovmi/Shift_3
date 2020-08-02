@@ -10,21 +10,24 @@ import com.example.shift_3.data.Note
 import kotlinx.android.synthetic.main.item_note.view.*
 
 typealias OnNoteItemClick = (Note) -> Unit
+typealias OnDeleteNoteItemClick = (Int) -> Unit
 
 class NotesListAdapter (
     private val context: Context,
     private var notesList: ArrayList<Note>,
-    private val onNoteItemClick: OnNoteItemClick
+    private val onNoteItemClick: OnNoteItemClick,
+    private val onDeleteNoteItemClick: OnDeleteNoteItemClick
 
 ) : RecyclerView.Adapter<NotesListAdapter.ViewHolder>()
 {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bindNote(note: Note, onNoteItemClick: OnNoteItemClick) {
+        fun bindNote(note: Note, position: Int, onNoteItemClick: OnNoteItemClick, onDeleteNoteItemClick: OnDeleteNoteItemClick) {
             itemView.apply {
                 itemNoteTittle.text=note.tittle
                 itemNoteDescription.text=note.description
 
                 setOnClickListener { onNoteItemClick(note) }
+                deleteNoteButton.setOnClickListener { onDeleteNoteItemClick(position) }
             }
         }
     }
@@ -39,7 +42,7 @@ class NotesListAdapter (
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       holder.bindNote(notesList[position], onNoteItemClick)
+       holder.bindNote(notesList[position], position, onNoteItemClick, onDeleteNoteItemClick)
     }
 
 }
